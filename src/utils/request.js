@@ -15,13 +15,13 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(config => {
   // do something before request is sent
-
-  if (store.getters.token) {
+  const token = store.state.user.token
+  if (token) {
     // let each request carry token
     // ['token'] is a custom headers key
     // please modify it according to the actual situation
     // 2. 改成token
-    config.headers['token'] = getToken()
+    config.headers['token'] = token
   }
   return config
 })
