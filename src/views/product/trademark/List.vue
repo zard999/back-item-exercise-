@@ -142,6 +142,7 @@ export default {
           this.page,
           this.limit
         )
+        console.log(result)
         if (result.code === 20000 || result.code === 200) {
           this.total = result.data.total
           this.trademarkList = result.data.records || []

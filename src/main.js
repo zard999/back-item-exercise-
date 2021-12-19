@@ -16,6 +16,9 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import * as API from '@/api/product/index'
+
+import CategorySelect from '@/components/CategorySelect'
+import HintButton from '@/components/HintButton'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -36,6 +39,10 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 Vue.prototype.$API = API
+
+Vue.component('CategorySelect', CategorySelect)
+Vue.component('HintButton', HintButton)
+
 new Vue({
   el: '#app',
   router,
