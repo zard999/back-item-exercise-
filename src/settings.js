@@ -1,12 +1,11 @@
 module.exports = {
-
   title: '谷粒商城后台管理',
 
   /**
    * @type {boolean} true | false
    * @description Whether fix the header
    */
-  fixedHeader: true,
+  fixedHeader: false,
 
   /**
    * @type {boolean} true | false

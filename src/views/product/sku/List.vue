@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'Attr'
+  name: 'Sku'
 }
 </script>
 

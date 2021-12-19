@@ -42,7 +42,6 @@ const actions = {
   async getInfo({ commit, state }) {
     const result = await getInfo(state.token)
     if (result.code === 20000) {
-      console.log(result)
       commit('SET_USER_INFO', result.data)
       return 'ok'
     } else {
