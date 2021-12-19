@@ -18,7 +18,7 @@
       </el-table-column>
 
       <el-table-column prop="prop" label="操作" width="width">
-        <template slot-scope="{ row, $index }">
+        <template slot-scope="{ row }">
           <el-button
             type="warning"
             icon="el-icon-edit"
@@ -57,12 +57,17 @@
       :visible.sync="dialogFormVisible"
     >
       <!-- 做表单验证必须写model -->
-      <el-form style="width:80%" :model="attrForm">
-        <el-form-item label="品牌名称" label-width="100px" :required="true">
+      <el-form
+        style="width:80%"
+        :model="attrForm"
+        :rules="rules"
+        ref="formName"
+      >
+        <el-form-item label="品牌名称" label-width="100px" prop="tmName">
           <el-input autocomplete="off" v-model="attrForm.tmName"></el-input>
         </el-form-item>
 
-        <el-form-item label="品牌LOGO" label-width="100px" :required="true">
+        <el-form-item label="品牌LOGO" label-width="100px" prop="logoUrl">
           <!-- action：代表图片上传的接口地址 show-file-list：false只能上传一张 -->
           <el-upload
             class="avatar-uploader"
@@ -106,6 +111,18 @@ export default {
       attrForm: {
         logoUrl: '',
         tmName: ''
+      },
+      rules: {
+        tmName: [
+          { required: true, message: '请输入品牌名称', trigger: 'blur' },
+          {
+            min: 2,
+            max: 10,
+            message: '长度在 2 到 10 个字符',
+            trigger: 'change'
+          }
+        ],
+        logoUrl: [{ required: true, message: '请上传图片', trigger: 'change' }]
       }
     }
   },
@@ -183,25 +200,37 @@ export default {
 
     // 点击dialog确定按钮添加或修改品牌
     async addOrUpdateTrademark() {
-      // 1. 获取参数数据
-      // 2. 整理数据
-      // 3. 发请求
-      // 4. 成功和失败的回调
-      let trademark = this.attrForm
-      try {
-        const result = await this.$API.trademark.addOrUpdate(trademark)
-        if (result.code === 20000 || result.code === 200) {
-          this.$message.success(trademark.id ? '修改品牌成功' : '添加品牌成功')
-          this.dialogFormVisible = false
-          this.getTrademarkList(trademark.id ? this.page : 1)
+      // 整体校验
+      this.$refs.formName.validate(async valid => {
+        if (valid) {
+          // 1. 获取参数数据
+          // 2. 整理数据
+          // 3. 发请求
+          // 4. 成功和失败的回调
+          let trademark = this.attrForm
+          try {
+            const result = await this.$API.trademark.addOrUpdate(trademark)
+            if (result.code === 20000 || result.code === 200) {
+              this.$message.success(
+                trademark.id ? '修改品牌成功' : '添加品牌成功'
+              )
+              this.dialogFormVisible = false
+              this.getTrademarkList(trademark.id ? this.page : 1)
+            } else {
+              this.$message.error(
+                trademark.id ? '修改品牌失败' : '添加品牌失败'
+              )
+            }
+          } catch (error) {
+            this.$message.error(
+              trademark.id ? '请求修改品牌失败' : '请求添加品牌失败'
+            )
+          }
         } else {
-          this.$message.error(trademark.id ? '修改品牌失败' : '添加品牌失败')
+          console.log('error submit!!')
+          return false
         }
-      } catch (error) {
-        this.$message.error(
-          trademark.id ? '请求修改品牌失败' : '请求添加品牌失败'
-        )
-      }
+      })
     },
 
     // 点击删除当前品牌
