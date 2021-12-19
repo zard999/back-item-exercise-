@@ -102,6 +102,14 @@
 export default {
   name: 'Trademark',
   data() {
+    // 自定义校验规则
+    var validateTmName = (rule, value, callback) => {
+      if (value.length < 2 || value.length > 10) {
+        callback(new Error('长度在 2 到 10 个字符'))
+      } else {
+        callback()
+      }
+    }
     return {
       page: 1,
       limit: 3,
@@ -115,12 +123,7 @@ export default {
       rules: {
         tmName: [
           { required: true, message: '请输入品牌名称', trigger: 'blur' },
-          {
-            min: 2,
-            max: 10,
-            message: '长度在 2 到 10 个字符',
-            trigger: 'change'
-          }
+          { validator: validateTmName, trigger: 'change' }
         ],
         logoUrl: [{ required: true, message: '请上传图片', trigger: 'change' }]
       }
