@@ -7,6 +7,7 @@
           v-model="cForm.category1Id"
           placeholder="请选择"
           @change="handleCategory1"
+          :disabled="!isShowList"
         >
           <el-option
             :label="c1.name"
@@ -22,6 +23,7 @@
           v-model="cForm.category2Id"
           placeholder="请选择"
           @change="handleCategory2"
+          :disabled="!isShowList"
         >
           <el-option
             :label="c2.name"
@@ -37,6 +39,7 @@
           v-model="cForm.category3Id"
           placeholder="请选择"
           @change="handleCategory3"
+          :disabled="!isShowList"
         >
           <el-option
             :label="c3.name"
@@ -53,6 +56,7 @@
 <script>
 export default {
   name: 'CategorySelect',
+  props: ['isShowList'],
   data() {
     return {
       category1List: [],
