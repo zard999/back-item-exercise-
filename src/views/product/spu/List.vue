@@ -6,10 +6,15 @@
         :isShowList="isShowList"
       ></CategorySelect>
     </el-card>
+
     <el-card style="margin-top:20px">
       <!-- spu列表页 -->
       <div v-show="!isShowSpuForm && !isShowSkuForm">
-        <el-button type="primary" icon="el-icon-plus" :disabled="!category3Id"
+        <el-button
+          type="primary"
+          icon="el-icon-plus"
+          :disabled="!category3Id"
+          @click="showAddSpu"
           >添加SPU</el-button
         >
 
@@ -35,7 +40,8 @@
                 type="warning"
                 icon="el-icon-edit"
                 size="mini"
-                title="修改SKU"
+                title="修改SPU"
+                @click="showUpdateSpu(row)"
               ></HintButton>
               <HintButton
                 type="info"
@@ -43,12 +49,18 @@
                 size="mini"
                 title="查看SPU的SKU列表"
               ></HintButton>
-              <HintButton
-                type="danger"
-                icon="el-icon-delete"
-                size="mini"
-                title="删除SKU"
-              ></HintButton>
+              <el-popconfirm
+                :title="`你确定删除${row.spuName}}吗？`"
+                @onConfirm="deleteSpu(row)"
+              >
+                <HintButton
+                  slot="reference"
+                  type="danger"
+                  icon="el-icon-delete"
+                  size="mini"
+                  title="删除SPU"
+                ></HintButton>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -69,7 +81,13 @@
       </div>
 
       <!-- 这个是添加和修改spu的页面 -->
-      <SpuForm v-show="isShowSpuForm"></SpuForm>
+      <SpuForm
+        ref="spu"
+        v-show="isShowSpuForm"
+        :visibly.sync="isShowSpuForm"
+        @backSuccess="backSuccess"
+        @cancelSuccess="cancelSuccess"
+      ></SpuForm>
 
       <!-- 这个是添加sku的页面 -->
       <SkuForm v-show="isShowSkuForm"></SkuForm>
@@ -89,10 +107,12 @@ export default {
       category2Id: '',
       category3Id: '',
       spuList: [],
+
       total: 0,
       page: 1,
       limit: 2,
-      isShowSpuForm: true,
+
+      isShowSpuForm: false,
       isShowSkuForm: false
     }
   },
@@ -138,6 +158,48 @@ export default {
     handleSizeChange(limit) {
       this.limit = limit
       this.getSpuList()
+    },
+
+    // 展示更新spu页面
+    showUpdateSpu(row) {
+      this.$refs.spu.updateSpuListDate(row.id, this.category3Id)
+      this.flag = row.id
+      this.isShowSpuForm = true
+    },
+
+    showAddSpu() {
+      this.isShowSpuForm = true
+      this.$refs.spu.addSpuListData(this.category3Id)
+    },
+
+    // 返回成功更新数据
+    backSuccess() {
+      if (this.flag) {
+        this.getSpuList(this.page)
+      } else {
+        this.getSpuList()
+      }
+      this.flag = null
+    },
+
+    // 取消让flag为null
+    cancelSuccess() {
+      this.flag = null
+    },
+
+    // 删除spu
+    async deleteSpu(row) {
+      try {
+        const result = await this.$API.spu.remove(row.id)
+        if (result.code === 200) {
+          this.$message.success('删除spu成功')
+          this.getSpuList(this.spuList.length ? this.page : this.page - 1)
+        } else {
+          this.$message.error('删除spu失败')
+        }
+      } catch (error) {
+        this.$message.error('请求删除spu失败')
+      }
     }
   },
 

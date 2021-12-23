@@ -27,5 +27,10 @@ export default {
   // 获取当前页的数据
   getPageList(page, limit) {
     return request.get(`/admin/product/baseTrademark/${page}/${limit}`)
+  },
+
+  // 获取所有品牌数据
+  getList() {
+    return request.get('/admin/product/baseTrademark/getTrademarkList')
   }
 }
