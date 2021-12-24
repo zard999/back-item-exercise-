@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'SkuForm'
+  name: 'SkuForm',
 }
 </script>
 

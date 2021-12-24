@@ -7,19 +7,19 @@
       ></CategorySelect>
     </el-card>
 
-    <el-card style="margin-top:20px">
-      <!-- spu列表页 -->
+    <el-card style="margin-top: 20px">
+      <!-- 列表页 -->
       <div v-show="!isShowSpuForm && !isShowSkuForm">
         <el-button
           type="primary"
           icon="el-icon-plus"
+          @click="showAddSpuForm"
           :disabled="!category3Id"
-          @click="showAddSpu"
           >添加SPU</el-button
         >
 
-        <el-table :data="spuList" style="width: 100%; margin: 20px 0">
-          <el-table-column align="center" label="序号" width="80" type="index">
+        <el-table :data="spuList" border style="width: 100%; margin: 20px 0">
+          <el-table-column type="index" align="center" label="序号" width="80">
           </el-table-column>
 
           <el-table-column prop="spuName" label="SPU名称" width="width">
@@ -29,35 +29,38 @@
           </el-table-column>
 
           <el-table-column prop="prop" label="操作" width="width">
-            <template slot-scope="{ row, $index }">
+            <template slot-scope="{ row }">
               <HintButton
                 type="success"
-                icon="el-icon-plus"
                 size="mini"
+                icon="el-icon-plus"
                 title="添加SKU"
+                @click="showAddSkuForm(row)"
               ></HintButton>
+
               <HintButton
                 type="warning"
-                icon="el-icon-edit"
                 size="mini"
+                icon="el-icon-edit"
                 title="修改SPU"
-                @click="showUpdateSpu(row)"
+                @click="showUpdateSpuForm(row)"
               ></HintButton>
+
               <HintButton
                 type="info"
-                icon="el-icon-info"
                 size="mini"
+                icon="el-icon-info"
                 title="查看SPU的SKU列表"
               ></HintButton>
               <el-popconfirm
-                :title="`你确定删除${row.spuName}}吗？`"
+                title="这是一段内容确定删除吗？"
                 @onConfirm="deleteSpu(row)"
               >
                 <HintButton
                   slot="reference"
                   type="danger"
-                  icon="el-icon-delete"
                   size="mini"
+                  icon="el-icon-delete"
                   title="删除SPU"
                 ></HintButton>
               </el-popconfirm>
@@ -65,31 +68,31 @@
           </el-table-column>
         </el-table>
 
-        <!-- @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" -->
         <el-pagination
-          @current-change="getSpuList"
+          :background="true"
           @size-change="handleSizeChange"
+          @current-change="getSpuList"
           :current-page="page"
           :page-sizes="[2, 4, 6]"
           :page-size="limit"
-          layout="prev, pager, next, jumper, ->, sizes ,total"
           :total="total"
+          :pager-count="7"
+          layout=" prev, pager, next, jumper, ->, sizes, total"
           style="text-align: center"
         >
         </el-pagination>
       </div>
 
-      <!-- 这个是添加和修改spu的页面 -->
+      <!-- 添加或修改spu界面 -->
       <SpuForm
         ref="spu"
         v-show="isShowSpuForm"
-        :visibly.sync="isShowSpuForm"
+        :visible.sync="isShowSpuForm"
         @backSuccess="backSuccess"
         @cancelSuccess="cancelSuccess"
       ></SpuForm>
 
-      <!-- 这个是添加sku的页面 -->
+      <!-- 添加sku界面 -->
       <SkuForm v-show="isShowSkuForm"></SkuForm>
     </el-card>
   </div>
@@ -108,15 +111,14 @@ export default {
       category3Id: '',
       spuList: [],
 
-      total: 0,
       page: 1,
       limit: 2,
+      total: 0,
 
       isShowSpuForm: false,
-      isShowSkuForm: false
+      isShowSkuForm: false,
     }
   },
-
   methods: {
     changeCategory({ categoryId, level }) {
       if (level === 1) {
@@ -134,79 +136,83 @@ export default {
       }
     },
 
-    // 获取spu列表数据
-    async getSpuList(page = 1) {
-      this.page = page
+    // 获取spu列表
+    async getSpuList(pageNum = 1) {
+      this.page = pageNum
+      let { page, limit, category3Id } = this
       try {
-        const result = await this.$API.spu.getPageList(
-          this.page,
-          this.limit,
-          this.category3Id
-        )
-        if (result.code === 20000 || result.code === 200) {
-          this.spuList = result.data.records
+        const result = await this.$API.spu.getList(page, limit, category3Id)
+        if (result.code === 200) {
           this.total = result.data.total
+          this.spuList = result.data.records
         } else {
-          this.$message.error('获取Spu列表失败')
+          this.$message.error('获取spu列表失败')
         }
       } catch (error) {
-        this.$message.error('请求获取Spu列表失败')
+        this.$message.error('请求获取spu列表失败')
       }
     },
 
-    // 改变当前页数量
+    // 修改当前页数量
     handleSizeChange(limit) {
       this.limit = limit
       this.getSpuList()
     },
 
-    // 展示更新spu页面
-    showUpdateSpu(row) {
-      this.$refs.spu.updateSpuListDate(row.id, this.category3Id)
+    // 点击添加Spu的按钮
+    showAddSpuForm() {
+      this.isShowSpuForm = true
+      this.$refs.spu.getInitAddSpuFormData(this.category3Id)
+    },
+
+    // 点击修改Spu的按钮
+    showUpdateSpuForm(row) {
+      this.isShowSpuForm = true
       this.flag = row.id
-      this.isShowSpuForm = true
+      this.$refs.spu.getInitUpdateSpuFormData(row, this.category3Id)
     },
 
-    showAddSpu() {
-      this.isShowSpuForm = true
-      this.$refs.spu.addSpuListData(this.category3Id)
+    // 点击添加Sku的按钮
+    showAddSkuForm(row) {
+      this.isShowSkuForm = true
     },
 
-    // 返回成功更新数据
+    // 成功返回发数据
     backSuccess() {
+      // this.flag用来标识是修改还是添加
       if (this.flag) {
         this.getSpuList(this.page)
       } else {
-        this.getSpuList()
+        this.getSpuList(1)
       }
       this.flag = null
     },
 
-    // 取消让flag为null
+    // 成功取消
     cancelSuccess() {
       this.flag = null
     },
 
-    // 删除spu
+    // 删除Spu
     async deleteSpu(row) {
       try {
         const result = await this.$API.spu.remove(row.id)
         if (result.code === 200) {
           this.$message.success('删除spu成功')
-          this.getSpuList(this.spuList.length ? this.page : this.page - 1)
+          this.getSpuList(this.spuList > 1 ? this.page : this.page - 1)
         } else {
           this.$message.error('删除spu失败')
         }
       } catch (error) {
         this.$message.error('请求删除spu失败')
       }
-    }
+    },
   },
 
   components: {
+    SpuForm,
     SkuForm,
-    SpuForm
-  }
+  },
 }
 </script>
 
