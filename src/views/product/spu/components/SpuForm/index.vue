@@ -74,7 +74,7 @@
           </el-table-column>
 
           <el-table-column prop="prop" label="属性值名称列表" width="width">
-            <template slot-scope="{ row, $index }">
+            <template slot-scope="{ row }">
               <el-tag
                 @close="row.spuSaleAttrValueList.splice(index, 1)"
                 v-for="(saleAttrValue, index) in row.spuSaleAttrValueList"
@@ -105,7 +105,7 @@
           </el-table-column>
 
           <el-table-column prop="prop" label="操作" width="150">
-            <template slot-scope="{ row, $index }">
+            <template slot-scope="{ $index }">
               <HintButton
                 type="danger"
                 size="mini"
@@ -166,14 +166,14 @@ export default {
           //     },
           //   ],
           // },
-        ],
+        ]
       },
 
       spuImageList: [],
       trademarkList: [],
       baseSaleAttrList: [],
 
-      unUsedSaleAttrIdValueId: '', // 这个销售属性收集id和name
+      unUsedSaleAttrIdValueId: '' // 这个销售属性收集id和name
     }
   },
   methods: {
@@ -245,12 +245,13 @@ export default {
 
     // 添加销售属性
     addSaleValue() {
-      const [baseSaleAttrId, saleAttrName] =
-        this.unUsedSaleAttrIdValueId.split(':')
+      const [baseSaleAttrId, saleAttrName] = this.unUsedSaleAttrIdValueId.split(
+        ':'
+      )
       const obj = {
         baseSaleAttrId,
         saleAttrName,
-        spuSaleAttrValueList: [],
+        spuSaleAttrValueList: []
       }
 
       this.spuInfo.spuSaleAttrList.push(obj)
@@ -288,7 +289,7 @@ export default {
 
       let obj = {
         baseSaleAttrId: row.baseSaleAttrId,
-        saleAttrValueName,
+        saleAttrValueName
       }
 
       row.spuSaleAttrValueList.push(obj)
@@ -308,7 +309,7 @@ export default {
       spuInfo.spuImageList = spuImageList.map(item => {
         return {
           imgName: item.name,
-          imgUrl: item.imgUrl || item.response.data,
+          imgUrl: item.imgUrl || item.response.data
         }
       })
 
@@ -328,7 +329,7 @@ export default {
           // 清除整个data
           this.resetData()
           // 重新发数据
-          this.$emit('backSuccess')
+          this.$emit('backSuccess', spuInfo.id)
         } else {
           this.$message.error('保存spu失败')
         }
@@ -338,34 +339,35 @@ export default {
     },
 
     resetData() {
-      this.dialogImageUrl = ''
-      this.dialogVisible = false
+      // this.dialogImageUrl = ''
+      // this.dialogVisible = false
 
-      // 下面这个对象是为了添加用的
-      this.spuInfo = {
-        category3Id: '',
-        spuName: '',
-        description: '',
-        tmId: '',
-        spuImageList: [],
-        spuSaleAttrList: [],
-      }
-      this.spuImageList = []
-      this.trademarkList = []
-      this.baseSaleAttrList = []
+      // // 下面这个对象是为了添加用的
+      // this.spuInfo = {
+      //   category3Id: '',
+      //   spuName: '',
+      //   description: '',
+      //   tmId: '',
+      //   spuImageList: [],
+      //   spuSaleAttrList: []
+      // }
+      // this.spuImageList = []
+      // this.trademarkList = []
+      // this.baseSaleAttrList = []
 
-      this.unUsedSaleAttrIdValueId = '' // 这个销售属性收集id和name
+      // this.unUsedSaleAttrIdValueId = '' // 这个销售属性收集id和name
+      Object.assign(this._data, this.$options.data())
     },
 
     // 取消按钮
     cancel() {
       this.$emit('update:visible', false)
 
-      this.$emit('cancelSuccess')
+      // this.$emit('cancelSuccess')
 
       // 重置数据
       this.resetData()
-    },
+    }
   },
 
   computed: {
@@ -376,8 +378,8 @@ export default {
           saleAttr => saleAttr.saleAttrName !== item.name
         )
       )
-    },
-  },
+    }
+  }
 }
 </script>
 

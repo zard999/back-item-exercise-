@@ -116,7 +116,7 @@ export default {
       total: 0,
 
       isShowSpuForm: false,
-      isShowSkuForm: false,
+      isShowSkuForm: false
     }
   },
   methods: {
@@ -168,7 +168,7 @@ export default {
     // 点击修改Spu的按钮
     showUpdateSpuForm(row) {
       this.isShowSpuForm = true
-      this.flag = row.id
+      // this.flag = row.id
       this.$refs.spu.getInitUpdateSpuFormData(row, this.category3Id)
     },
 
@@ -178,20 +178,20 @@ export default {
     },
 
     // 成功返回发数据
-    backSuccess() {
+    backSuccess(spuId) {
       // this.flag用来标识是修改还是添加
-      if (this.flag) {
+      if (spuId) {
         this.getSpuList(this.page)
       } else {
         this.getSpuList(1)
       }
-      this.flag = null
+      // this.flag = null
     },
 
     // 成功取消
-    cancelSuccess() {
-      this.flag = null
-    },
+    // cancelSuccess() {
+    //   this.flag = null
+    // },
 
     // 删除Spu
     async deleteSpu(row) {
@@ -206,13 +206,13 @@ export default {
       } catch (error) {
         this.$message.error('请求删除spu失败')
       }
-    },
+    }
   },
 
   components: {
     SpuForm,
-    SkuForm,
-  },
+    SkuForm
+  }
 }
 </script>
 
