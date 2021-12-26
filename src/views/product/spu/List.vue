@@ -122,6 +122,17 @@ export default {
       isShowSkuForm: false
     }
   },
+  watch: {
+    isShowSpuForm: {
+      handler(newVal) {
+        this.isShowList = !newVal
+      }
+    },
+
+    isShowSkuForm(newVal) {
+      this.isShowList = !newVal
+    }
+  },
   methods: {
     changeCategory({ categoryId, level }) {
       if (level === 1) {
