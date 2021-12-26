@@ -202,7 +202,7 @@ export default {
 
       let spuImageList = result[2].data
       spuImageList.forEach(item => {
-        this.$set(item, 'isDefault', 0)
+        item.isDefault = '0'
       })
       this.spuImageList = spuImageList
     },

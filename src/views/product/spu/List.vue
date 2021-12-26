@@ -51,6 +51,7 @@
                 size="mini"
                 icon="el-icon-info"
                 title="查看SPU的SKU列表"
+                @click="showDialog(row)"
               ></HintButton>
               <el-popconfirm
                 title="这是一段内容确定删除吗？"
@@ -98,6 +99,23 @@
         :visible.sync="isShowSkuForm"
       ></SkuForm>
     </el-card>
+
+    <el-dialog
+      :title="`${spu.spuName}的sku列表`"
+      :visible.sync="dialogTableVisible"
+      :before-close="handlerClose"
+    >
+      <el-table :data="skuList" v-loading="loading">
+        <el-table-column property="skuName" label="名称"></el-table-column>
+        <el-table-column property="price" label="价格"></el-table-column>
+        <el-table-column property="weight" label="重量"></el-table-column>
+        <el-table-column property="name" label="默认图片">
+          <template slot-scope="{ row }">
+            <img :src="row.skuDefaultImg" style="width:100px;height:80px;" />
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -119,7 +137,13 @@ export default {
       total: 0,
 
       isShowSpuForm: false,
-      isShowSkuForm: false
+      isShowSkuForm: false,
+
+      // 查看spu需要用到的数据
+      dialogTableVisible: false,
+      spu: '',
+      skuList: [],
+      loading: false
     }
   },
   watch: {
@@ -222,6 +246,32 @@ export default {
       } catch (error) {
         this.$message.error('请求删除spu失败')
       }
+    },
+
+    // 查看对应spu的sku
+    async showDialog(row) {
+      this.spu = row
+      this.dialogTableVisible = true
+      this.loading = true
+
+      try {
+        const result = await this.$API.sku.getListBySpuId(row.id)
+        if (result.code === 200) {
+          this.skuList = result.data
+        } else {
+          this.$message.error('获取sku列表失败')
+        }
+      } catch (error) {
+        this.$message.error('请求获取sku列表失败')
+      }
+      this.loading = false
+    },
+
+    // dialog关闭之前
+    handlerClose() {
+      this.skuList = []
+      this.dialogTableVisible = false
+      this.loading = false
     }
   },
 
