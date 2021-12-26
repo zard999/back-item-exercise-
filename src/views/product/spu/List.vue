@@ -92,7 +92,11 @@
       ></SpuForm>
 
       <!-- 添加sku界面 -->
-      <SkuForm v-show="isShowSkuForm"></SkuForm>
+      <SkuForm
+        ref="sku"
+        v-show="isShowSkuForm"
+        :visible.sync="isShowSkuForm"
+      ></SkuForm>
     </el-card>
   </div>
 </template>
@@ -174,6 +178,8 @@ export default {
     // 点击添加Sku的按钮
     showAddSkuForm(row) {
       this.isShowSkuForm = true
+      // 点击添加sku按钮发请求
+      this.$refs.sku.addInitSkuFormData(row, this.category1Id, this.category2Id)
     },
 
     // 成功返回发数据
