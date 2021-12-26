@@ -89,7 +89,6 @@
         v-show="isShowSpuForm"
         :visible.sync="isShowSpuForm"
         @backSuccess="backSuccess"
-        @cancelSuccess="cancelSuccess"
       ></SpuForm>
 
       <!-- 添加sku界面 -->
