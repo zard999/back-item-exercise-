@@ -96,7 +96,12 @@
           <el-table-column prop="imgName" label="名称"> </el-table-column>
           <el-table-column prop="address" label="操作" show-overflow-tooltip>
             <template slot-scope="{ row }">
-              <el-tag v-if="row.isDefault === '1'" type="success">默认</el-tag>
+              <el-tag
+                :disable-transitions="true"
+                v-if="row.isDefault === '1'"
+                type="success"
+                >默认</el-tag
+              >
               <el-button
                 v-else
                 type="primary"
