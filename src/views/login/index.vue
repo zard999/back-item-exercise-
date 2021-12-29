@@ -76,7 +76,7 @@ export default {
      * callback：传参数代表不通过，没传则代表通过
      */
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
+      if (value.length < 5) {
         callback(new Error('用户名长度不能小于5'))
       } else {
         callback()

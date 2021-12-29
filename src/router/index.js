@@ -30,6 +30,8 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+
+// 常量路由：所有的用户都能看到的放在这里面
 export const constantRoutes = [
   {
     path: '/login',
@@ -55,8 +57,13 @@ export const constantRoutes = [
         meta: { title: '首页', icon: 'dashboard' }
       }
     ]
-  },
+  }
+]
 
+// 异步路由（动态路由）：这里面放的是所有的需要动态设置添加到路由器里面的路由
+// 后期我们会根据用户返回的routes数据，从这个数组当中过滤用户自己需要动态展示的路由
+export const allAsyncRoutes = [
+  // 配商品管理
   {
     path: '/product',
     component: Layout,
@@ -88,11 +95,11 @@ export const constantRoutes = [
         meta: { title: 'SKU管理' }
       }
     ]
-  },
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
+
+// 任意路由：这个路由一定是配置在路由器当中的最后一个
+export const anyRoute = { path: '*', redirect: '/404', hidden: true }
 
 const createRouter = () =>
   new Router({
