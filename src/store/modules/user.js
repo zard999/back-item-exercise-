@@ -1,7 +1,7 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo } from '@/api/acl/user'
 import { resetRouter, allAsyncRoutes, constantRoutes, anyRoute } from '@/router'
 import router from '@/router'
-
+import cloneDeep from 'lodash/cloneDeep'
 // 过滤异步路由数组
 function filterAsyncRoutes(allAsyncRoutes, routeNames) {
   let asyncRoutes = allAsyncRoutes.filter(item => {
@@ -88,7 +88,7 @@ const actions = {
       // result.data.routes 不是要这个，而是要从异步路由数组当中过滤好的异步路由数组
       commit(
         'SET_ROUTES',
-        filterAsyncRoutes(allAsyncRoutes, result.data.routes)
+        filterAsyncRoutes(cloneDeep(allAsyncRoutes), result.data.routes)
       )
       return 'ok'
     } else {

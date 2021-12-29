@@ -15,8 +15,8 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-import * as API from '@/api/product/index'
-
+import * as API from '@/api/index'
+import { hasBtnPermission } from '@/utils/btnPermission'
 import CategorySelect from '@/components/CategorySelect'
 import HintButton from '@/components/HintButton'
 
@@ -41,6 +41,7 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 Vue.prototype.$API = API
+Vue.prototype.$hasBt = hasBtnPermission
 
 Vue.component('CategorySelect', CategorySelect)
 Vue.component('HintButton', HintButton)

@@ -3,7 +3,6 @@ import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
@@ -33,8 +32,8 @@ router.beforeEach(async (to, from, next) => {
         try {
           // get user info
           await store.dispatch('user/getInfo')
-
-          next()
+          // next() 这里直接放行，重新跳转到历史路由，路由还是找原本的动态添加之前得路由
+          next({ ...to }) // 我们需要强制的让next重新去跳转之前想去的地方一次
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/logout')
