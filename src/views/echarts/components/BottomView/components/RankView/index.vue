@@ -165,7 +165,7 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .el-card__header {
-  padding: 13px 20px;
+  padding: 11.5px 20px;
 }
 .header {
   display: flex;
@@ -173,6 +173,6 @@ export default {
   align-items: center;
 }
 .main {
-  height: 455px;
+  height: 520px;
 }
 </style>

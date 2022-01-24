@@ -42,17 +42,17 @@
             <el-table-column prop="percent" label="搜索占比" width="width">
             </el-table-column>
           </el-table>
-
-          <el-pagination
-            style="text-align: center; margin: 20px 0"
-            @current-change="page = $event"
-            :current-page="page"
-            :page-size="limit"
-            layout="prev, pager, next,total"
-            :total="searchWord.length"
-          >
-          </el-pagination>
         </div>
+
+        <el-pagination
+          style="text-align: center; margin: 20px 0"
+          @current-change="page = $event"
+          :current-page="page"
+          :page-size="limit"
+          layout="prev, pager, next,total"
+          :total="searchWord.length"
+        >
+        </el-pagination>
       </div>
     </el-card>
   </div>
@@ -163,10 +163,13 @@ export default {
 }
 .count {
   font-size: 24px;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
 }
 .view {
   widows: 100%;
   height: 50px;
+}
+.table {
+  height: 350px;
 }
 </style>
