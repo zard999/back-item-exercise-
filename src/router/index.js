@@ -36,13 +36,13 @@ export const constantRoutes = [
   {
     path: '/login',
     component: () => import('@/views/login/index'),
-    hidden: true
+    hidden: true,
   },
 
   {
     path: '/404',
     component: () => import('@/views/404'),
-    hidden: true
+    hidden: true,
   },
 
   {
@@ -54,10 +54,23 @@ export const constantRoutes = [
         path: 'dashboard',
         name: 'Dashboard',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: '首页', icon: 'dashboard' }
-      }
-    ]
-  }
+        meta: { title: '首页', icon: 'dashboard' },
+      },
+    ],
+  },
+  {
+    path: '/echarts',
+    component: Layout,
+    meta: { title: 'Echarts', icon: 'el-icon-s-marketing' },
+    children: [
+      {
+        path: 'sale',
+        name: 'Sale',
+        component: () => import('@/views/echarts'),
+        meta: { title: '销售管理' },
+      },
+    ],
+  },
 ]
 
 // 异步路由（动态路由）：这里面放的是所有的需要动态设置添加到路由器里面的路由
@@ -71,7 +84,7 @@ export const allAsyncRoutes = [
     redirect: '/acl/user/list',
     meta: {
       title: '权限管理',
-      icon: 'el-icon-lock'
+      icon: 'el-icon-lock',
     },
     children: [
       {
@@ -79,16 +92,16 @@ export const allAsyncRoutes = [
         path: 'user/list',
         component: () => import('@/views/acl/user/list'),
         meta: {
-          title: '用户管理'
-        }
+          title: '用户管理',
+        },
       },
       {
         name: 'Role',
         path: 'role/list',
         component: () => import('@/views/acl/role/list'),
         meta: {
-          title: '角色管理'
-        }
+          title: '角色管理',
+        },
       },
       {
         name: 'RoleAuth',
@@ -96,19 +109,19 @@ export const allAsyncRoutes = [
         component: () => import('@/views/acl/role/roleAuth'),
         meta: {
           activeMenu: '/acl/role/list',
-          title: '角色授权'
+          title: '角色授权',
         },
-        hidden: true
+        hidden: true,
       },
       {
         name: 'Permission',
         path: 'permission/list',
         component: () => import('@/views/acl/permission/list'),
         meta: {
-          title: '菜单管理'
-        }
-      }
-    ]
+          title: '菜单管理',
+        },
+      },
+    ],
   },
   // 配商品管理
   {
@@ -121,28 +134,28 @@ export const allAsyncRoutes = [
         path: 'trademark',
         component: () => import('@/views/product/trademark/List.vue'),
         name: 'Trademark',
-        meta: { title: '品牌管理' }
+        meta: { title: '品牌管理' },
       },
       {
         path: 'attr',
         component: () => import('@/views/product/attr/List.vue'),
         name: 'Attr',
-        meta: { title: '平台属性管理' }
+        meta: { title: '平台属性管理' },
       },
       {
         path: 'spu',
         component: () => import('@/views/product/spu/List.vue'),
         name: 'Spu',
-        meta: { title: 'SPU管理' }
+        meta: { title: 'SPU管理' },
       },
       {
         path: 'sku',
         component: () => import('@/views/product/sku/List.vue'),
         name: 'Sku',
-        meta: { title: 'SKU管理' }
-      }
-    ]
-  }
+        meta: { title: 'SKU管理' },
+      },
+    ],
+  },
 ]
 
 // 任意路由：这个路由一定是配置在路由器当中的最后一个
@@ -152,7 +165,7 @@ const createRouter = () =>
   new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
+    routes: constantRoutes,
   })
 
 const router = createRouter()

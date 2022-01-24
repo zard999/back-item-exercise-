@@ -19,8 +19,13 @@ import * as API from '@/api/index'
 import { hasBtnPermission } from '@/utils/btnPermission'
 import CategorySelect from '@/components/CategorySelect'
 import HintButton from '@/components/HintButton'
+import CommonSale from '@/components/CommonSale'
 
 import '@/plugins/vcharts'
+import '@/styles/echarts.css'
+import '@/mockServer'
+// 引入自定义过滤器
+import '@/filters'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -45,10 +50,11 @@ Vue.prototype.$hasBt = hasBtnPermission
 
 Vue.component('CategorySelect', CategorySelect)
 Vue.component('HintButton', HintButton)
+Vue.component('CommonSale', CommonSale)
 
 new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
 })
